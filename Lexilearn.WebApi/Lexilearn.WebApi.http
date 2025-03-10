@@ -1,0 +1,6 @@
+@Lexilearn.WebApi_HostAddress = http://localhost:5288
+
+GET {{Lexilearn.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
