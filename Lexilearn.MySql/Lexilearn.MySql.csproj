@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Lexilearn.Application\Lexilearn.Application.csproj" />
     <ProjectReference Include="..\Lexilearn.Domain\Lexilearn.Domain.csproj" />
   </ItemGroup>

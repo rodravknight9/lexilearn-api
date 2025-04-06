@@ -1,5 +1,8 @@
 ﻿using Lexilearn.Application.Contracts.Persistence;
+using Lexilearn.Application.Contracts.Persistence.Repository;
 using Lexilearn.MySql.Persistence;
+using Lexilearn.MySql.Repository;
+using Lexilearn.MySql.Repository.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +20,11 @@ namespace Lexilearn.MySql
                 options.UseMySql(connectionString, serverVersion)
             );
 
-            //services.AddScoped<IUnitOfWork>
-            //services.AddScoped(typeof(IAsyncRepository), typeof(RepositoryBase))
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
+
+            services.AddScoped<IDeckRepository, DeckRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
 
             return services;
         }
