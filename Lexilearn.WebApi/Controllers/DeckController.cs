@@ -1,4 +1,8 @@
 ﻿using Lexilearn.Application.Features.Lexilearn.Decks.Commands.CreateDeck;
+using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
+using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
+using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
+using Lexilearn.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +18,23 @@ namespace Lexilearn.WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost()]
-        public async Task<ActionResult<int>> Create([FromBody] CreateDeckCommand command)
+        [HttpPost]
+        public async Task<ActionResult<CreateDeckResponse>> Create([FromBody] CreateDeckCommand command)
         { 
-            return await _mediator.Send(command);
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetDeckResponse>> GetById(int id)
+        {
+            var query = new GetDeckQuery(id);
+            return Ok(await _mediator.Send(query));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<GetDeckResponse>> GetMany([FromQuery] GetDecksQuery query)
+        {
+            return Ok(await _mediator.Send(query));
         }
     }
 }

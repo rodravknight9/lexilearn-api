@@ -1,7 +1,9 @@
 ﻿using Lexilearn.Application.Contracts.Persistence;
 using Lexilearn.Domain.Common;
 using Lexilearn.MySql.Persistence;
+using Lexilearn.Shared;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq.Expressions;
 
 namespace Lexilearn.MySql.Repository.Base
@@ -41,6 +43,16 @@ namespace Lexilearn.MySql.Repository.Base
         public async Task<TEntity> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
+        }
+
+        public async Task<IReadOnlyList<TEntity>> GetMany(PaginationSettings pagination)
+        {
+            int pageNumber = pagination.PageNumber ?? 0;
+            int pageSize = pagination.PageSize ?? 10;
+            return await _dbSet
+                    .Skip(pageNumber * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)

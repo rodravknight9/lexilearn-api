@@ -9,6 +9,7 @@ namespace Lexilearn.Application.Mappings
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<CreateDeckCommand, Deck>();
+
         }
     }
 }

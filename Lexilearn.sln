@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.WebApi", "Lexilearn.WebApi\Lexilearn.WebApi.csproj", "{F9871CE4-620C-4EE9-B67F-98B558FADCD5}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.MySql", "Lexilearn.MySql\Lexilearn.MySql.csproj", "{D81049FE-9D4B-4C8C-AC95-916A99648E66}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.Identity", "Lexilearn.Identity\Lexilearn.Identity.csproj", "{C678A8F2-45D7-4A40-B8A7-670BA0634E57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.Shared", "Lexilearn.Shared\Lexilearn.Shared.csproj", "{1E61D587-83B6-496A-B813-8CE1068F3699}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{C678A8F2-45D7-4A40-B8A7-670BA0634E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C678A8F2-45D7-4A40-B8A7-670BA0634E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C678A8F2-45D7-4A40-B8A7-670BA0634E57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E61D587-83B6-496A-B813-8CE1068F3699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E61D587-83B6-496A-B813-8CE1068F3699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E61D587-83B6-496A-B813-8CE1068F3699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E61D587-83B6-496A-B813-8CE1068F3699}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,5 +80,6 @@ Global
 		{823E8959-33E6-4CAA-9664-9017297622A2} = {A3E14435-F0B6-4983-A47B-74D3F9829BA9}
 		{D81049FE-9D4B-4C8C-AC95-916A99648E66} = {7C27B86B-C07A-457B-AACC-AA45D6CD29D1}
 		{C678A8F2-45D7-4A40-B8A7-670BA0634E57} = {7C27B86B-C07A-457B-AACC-AA45D6CD29D1}
+		{1E61D587-83B6-496A-B813-8CE1068F3699} = {46D1EFBE-6080-4B6E-A542-07C6BED89110}
 	EndGlobalSection
 EndGlobal

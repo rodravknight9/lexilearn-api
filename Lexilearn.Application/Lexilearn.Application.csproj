@@ -14,10 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lexilearn.Domain\Lexilearn.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Lexilearn\Decks\Queries\" />
+    <ProjectReference Include="..\Lexilearn.Shared\Lexilearn.Shared.csproj" />
   </ItemGroup>
 
 </Project>

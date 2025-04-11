@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Leaxilearn.LibreTranslate\Leaxilearn.LibreTranslate.csproj" />
     <ProjectReference Include="..\Lexilearn.Application\Lexilearn.Application.csproj" />
     <ProjectReference Include="..\Lexilearn.MySql\Lexilearn.MySql.csproj" />
+    <ProjectReference Include="..\Lexilearn.Shared\Lexilearn.Shared.csproj" />
   </ItemGroup>
 
 </Project>

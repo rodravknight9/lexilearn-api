@@ -19,7 +19,7 @@ namespace Lexilearn.WebApi.Controllers
         [HttpPost()]
         public async Task<ActionResult<TranslationResponse>> Translate([FromBody] TranslateTextCommand command)
         { 
-            return await _mediator.Send(command);
+            return Ok(await _mediator.Send(command));
         }
     }
 }
