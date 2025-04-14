@@ -30,14 +30,16 @@ namespace Lexilearn.MySql.Repository.Base
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+        public async Task<IReadOnlyList<TEntity>> GetAsync(PaginationSettings pagination, Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.ToListAsync();
-        }
-
-        public async Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
+            int pageNumber = pagination.PageNumber ?? 0;
+            int pageSize = pagination.PageSize ?? 10;
+            
+            return await _dbSet
+                .Where(predicate)
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(int id)

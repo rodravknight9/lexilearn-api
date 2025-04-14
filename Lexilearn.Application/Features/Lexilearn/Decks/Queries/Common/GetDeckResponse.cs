@@ -7,9 +7,9 @@
         public int? CreatedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public int? LastModifiedBy { get; set; }
-        public required string Title { get; set; }
-        public required string TermLanguageCode { get; set; }
-        public required string DefinitionLanguageCode { get; set; }
+        public string Title { get; set; }
+        public string TermLanguageCode { get; set; }
+        public string DefinitionLanguageCode { get; set; }
         public string? Description { get; set; }
         public string? Color { get; set; }
     }

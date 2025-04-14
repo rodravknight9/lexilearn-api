@@ -13,7 +13,17 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureLibreTranslateService(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
 
+/*builder.WebHost.ConfigureKestrel((opt =>
+{
+    opt.ListenAnyIP(5000);
+}));*/
+
 var app = builder.Build();
+
+app.UseCors(x => 
+    x.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

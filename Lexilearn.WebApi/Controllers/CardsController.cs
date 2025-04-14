@@ -1,12 +1,46 @@
+using Lexilearn.Application.Features.Lexilearn.Cards.Commands.CreateCard;
+using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
+using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCard;
+using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCardsByDeck;
+using Lexilearn.Shared;
+using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lexilearn.WebApi.Controllers;
 
-public class CardsController : Controller
+[Route("api/[controller]")]
+[ApiController]
+public class CardsController : ControllerBase
 {
-    // GET
-    public IActionResult Index()
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public CardsController(IMediator mediator, IMapper mapper)
     {
-        return View();
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<CreateCardResponse>> Create([FromBody] CreateCardCommand command)
+    {
+        return Ok(await _mediator.Send(command));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetCardResponse>> Get([FromQuery] int id)
+    {
+        var query = new GetCardQuery(id);
+        return Ok(await _mediator.Send(query));
+    }
+
+    [HttpGet("Deck/{deckId}/")]
+    public async Task<ActionResult<IReadOnlyList<GetCardResponse>>> GetByDeck([FromRoute] int deckId, 
+        [FromQuery] PaginationSettings pagination)
+    {
+        var request = _mapper.Map<GetCardsByDeckQuery>(pagination);
+        request.DeckId = deckId;
+        return Ok(await _mediator.Send(request));
     }
 }

@@ -1,6 +1,26 @@
+using Lexilearn.Application.Contracts.Persistence;
+using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
+using Lexilearn.Shared;
+using MapsterMapper;
+using MediatR;
+
 namespace Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCardsByDeck;
 
-public class GetDeckCardsByDeckHandler
+public class GetDeckCardsByDeckHandler : IRequestHandler<GetCardsByDeckQuery, IReadOnlyList<GetCardResponse>>
 {
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
     
+    public GetDeckCardsByDeckHandler(IMapper mapper, IUnitOfWork unitOfWork)
+    {
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
+    }
+    
+    public async Task<IReadOnlyList<GetCardResponse>> Handle(GetCardsByDeckQuery request, CancellationToken cancellationToken)
+    {
+        var pagination = _mapper.Map<PaginationSettings>(request);
+        var cards = await _unitOfWork.CardRepository.GetByDeckId(pagination, request.DeckId);
+        return _mapper.Map<IReadOnlyList<GetCardResponse>>(cards);
+    }
 }
