@@ -2,7 +2,6 @@
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
-using Lexilearn.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
