@@ -1,4 +1,6 @@
 using Lexilearn.Application.Features.Lexilearn.Cards.Commands.CreateCard;
+using Lexilearn.Application.Features.Lexilearn.Cards.Commands.DeleteCard;
+using Lexilearn.Application.Features.Lexilearn.Cards.Commands.EditCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCardsByDeck;
@@ -28,6 +30,13 @@ public class CardsController : ControllerBase
         return Ok(await _mediator.Send(command));
     }
 
+    [HttpPatch]
+    public async Task<ActionResult> Update([FromBody] EditCardCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+    
     [HttpGet("{id}")]
     public async Task<ActionResult<GetCardResponse>> Get([FromQuery] int id)
     {
@@ -42,5 +51,13 @@ public class CardsController : ControllerBase
         var request = _mapper.Map<GetCardsByDeckQuery>(pagination);
         request.DeckId = deckId;
         return Ok(await _mediator.Send(request));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var command = new DeleteCardCommand(id);
+        await _mediator.Send(command);
+        return Ok();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Lexilearn.Application.Features.Lexilearn.Decks.Commands.CreateDeck;
+using Lexilearn.Application.Features.Lexilearn.Decks.Commands.DeleteDeck;
+using Lexilearn.Application.Features.Lexilearn.Decks.Commands.EditDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
@@ -23,6 +25,13 @@ namespace Lexilearn.WebApi.Controllers
             return Ok(await _mediator.Send(command));
         }
 
+        [HttpPatch]
+        public async Task<ActionResult> Update([FromBody] EditDeckCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GetDeckResponse>> GetById(int id)
         {
@@ -34,6 +43,14 @@ namespace Lexilearn.WebApi.Controllers
         public async Task<ActionResult<GetDeckResponse>> GetMany([FromQuery] GetDecksQuery query)
         {
             return Ok(await _mediator.Send(query));
+        }
+        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var command = new DeleteDeckCommand(id);
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

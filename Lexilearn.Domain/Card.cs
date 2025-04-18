@@ -2,7 +2,7 @@
 
 namespace Lexilearn.Domain
 {
-    public class Card : BaseDomainModel
+    public class Card : AuditoryBaseDomain
     {
         public required string Front {  get; set; }
         public required string Back {  get; set; }

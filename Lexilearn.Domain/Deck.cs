@@ -2,7 +2,7 @@
 
 namespace Lexilearn.Domain
 {
-    public class Deck : BaseDomainModel
+    public class Deck : AuditoryBaseDomain
     {
         public required string Title { get; set; }
         public required string TermLanguageCode { get; set; }
