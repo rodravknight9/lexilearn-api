@@ -15,12 +15,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Leaxilearn.LibreTranslate\Leaxilearn.LibreTranslate.csproj" />
     <ProjectReference Include="..\Lexilearn.Application\Lexilearn.Application.csproj" />
+    <ProjectReference Include="..\Lexilearn.Identity\Lexilearn.Identity.csproj" />
     <ProjectReference Include="..\Lexilearn.MySql\Lexilearn.MySql.csproj" />
     <ProjectReference Include="..\Lexilearn.Shared\Lexilearn.Shared.csproj" />
   </ItemGroup>

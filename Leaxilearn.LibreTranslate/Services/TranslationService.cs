@@ -25,7 +25,6 @@ namespace Leaxilearn.LibreTranslate.Services
             var url = GetLibreTranslateHost();
 
             var response = await _httpClient.PostAsync(url, data);
-            string result = response.Content.ReadAsStringAsync().Result;
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var translation = JsonSerializer.Deserialize<TranslationResponse>(jsonResponse);

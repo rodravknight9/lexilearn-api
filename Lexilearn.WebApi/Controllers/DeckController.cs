@@ -5,12 +5,14 @@ using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lexilearn.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class DeckController : ControllerBase
     {
         private readonly IMediator _mediator;

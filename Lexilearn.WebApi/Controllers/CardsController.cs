@@ -38,7 +38,7 @@ public class CardsController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetCardResponse>> Get([FromQuery] int id)
+    public async Task<ActionResult<GetCardResponse>> Get(int id)
     {
         var query = new GetCardQuery(id);
         return Ok(await _mediator.Send(query));
