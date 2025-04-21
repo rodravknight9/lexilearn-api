@@ -6,5 +6,6 @@ namespace Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks
 {
     public class GetDecksQuery : PaginationSettings, IRequest<List<GetDeckResponse>>
     {
+        public int UserId { get; set; }
     }
 }

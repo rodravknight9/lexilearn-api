@@ -54,7 +54,8 @@ public class AuthService : IAuthService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             }),
             //Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(

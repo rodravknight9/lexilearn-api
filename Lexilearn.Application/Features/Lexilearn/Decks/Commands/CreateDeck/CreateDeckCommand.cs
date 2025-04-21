@@ -9,5 +9,6 @@ namespace Lexilearn.Application.Features.Lexilearn.Decks.Commands.CreateDeck
         public string DefinitionLanguageCode { get; set; }
         public string? Description { get; set; }
         public string? Color { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
