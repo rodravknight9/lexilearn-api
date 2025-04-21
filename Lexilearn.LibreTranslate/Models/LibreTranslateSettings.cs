@@ -1,4 +1,4 @@
-﻿namespace Leaxilearn.LibreTranslate.Models
+﻿namespace Lexilearn.LibreTranslate.Models
 {
     public class LibreTranslateSettings
     {

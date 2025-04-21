@@ -1,11 +1,11 @@
-﻿using Leaxilearn.LibreTranslate.Models;
-using Lexilearn.Application.Contracts.Infastructure;
+﻿using Lexilearn.Application.Contracts.Infastructure;
 using Lexilearn.Application.Models.LexiLearn;
 using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.Json;
+using Lexilearn.LibreTranslate.Models;
 
-namespace Leaxilearn.LibreTranslate.Services
+namespace Lexilearn.LibreTranslate.Services
 {
     public class TranslationService : ITranslationService
     {

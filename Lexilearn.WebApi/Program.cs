@@ -1,4 +1,4 @@
-using Leaxilearn.LibreTranslate;
+using Lexilearn.LibreTranslate;
 using Lexilearn.Application;
 using Lexilearn.Identity;
 using Lexilearn.MySql;

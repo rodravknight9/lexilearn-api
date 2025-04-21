@@ -1,10 +1,10 @@
-﻿using Leaxilearn.LibreTranslate.Models;
-using Leaxilearn.LibreTranslate.Services;
-using Lexilearn.Application.Contracts.Infastructure;
+﻿using Lexilearn.Application.Contracts.Infastructure;
+using Lexilearn.LibreTranslate.Models;
+using Lexilearn.LibreTranslate.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Leaxilearn.LibreTranslate
+namespace Lexilearn.LibreTranslate
 {
     public static class InfrastructureLibreTranslateRegistration
     {

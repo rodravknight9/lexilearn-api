@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.Domain", "Lexilea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.Application", "Lexilearn.Application\Lexilearn.Application.csproj", "{AD1E6033-9171-4C83-8463-721BE57839F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leaxilearn.LibreTranslate", "Leaxilearn.LibreTranslate\Leaxilearn.LibreTranslate.csproj", "{823E8959-33E6-4CAA-9664-9017297622A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.LibreTranslate", "Lexilearn.LibreTranslate\Lexilearn.LibreTranslate.csproj", "{823E8959-33E6-4CAA-9664-9017297622A2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.MySql", "Lexilearn.MySql\Lexilearn.MySql.csproj", "{D81049FE-9D4B-4C8C-AC95-916A99648E66}"
 EndProject
