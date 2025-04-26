@@ -1,4 +1,4 @@
-﻿namespace Lexilearn.Application.Models.LexiLearn
+﻿namespace Lexilearn.Application.Models.LibreTranslate
 {
     public class TranslationResponse
     {

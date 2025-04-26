@@ -39,8 +39,9 @@ namespace Lexilearn.WebApi.Controllers
         public async Task<ActionResult> Update([FromBody] EditDeckRequest request)
         {
             var command = _mapper.Map<EditDeckCommand>(request);
+            command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); 
             await _mediator.Send(command);
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}")]
@@ -64,7 +65,7 @@ namespace Lexilearn.WebApi.Controllers
         {
             var command = new DeleteDeckCommand(id);
             await _mediator.Send(command);
-            return Ok();
+            return NoContent();
         }
     }
 }

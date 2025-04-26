@@ -1,5 +1,5 @@
 ﻿using Lexilearn.Application.Features.Translation.Commands.TranslateText;
-using Lexilearn.Application.Models.LexiLearn;
+using Lexilearn.Application.Models.LibreTranslate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

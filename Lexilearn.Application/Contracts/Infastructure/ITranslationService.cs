@@ -1,4 +1,4 @@
-﻿using Lexilearn.Application.Models.LexiLearn;
+﻿using Lexilearn.Application.Models.LibreTranslate;
 
 namespace Lexilearn.Application.Contracts.Infastructure
 {

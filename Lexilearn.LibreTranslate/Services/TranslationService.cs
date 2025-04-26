@@ -1,5 +1,5 @@
 ﻿using Lexilearn.Application.Contracts.Infastructure;
-using Lexilearn.Application.Models.LexiLearn;
+using Lexilearn.Application.Models.LibreTranslate;
 using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.Json;
