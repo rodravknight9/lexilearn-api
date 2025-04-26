@@ -1,8 +1,9 @@
+using Lexilearn.Application.Models.LexiLearn;
 using MediatR;
 
 namespace Lexilearn.Application.Features.Lexilearn.Decks.Commands.EditDeck;
 
-public class EditDeckCommand : IRequest
+public class EditDeckCommand : IRequest<SoftResult>
 {
     public int Id { get; set; }
     public string Title { get; set; }

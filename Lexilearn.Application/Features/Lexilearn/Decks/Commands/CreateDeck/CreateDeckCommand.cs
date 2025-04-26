@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Lexilearn.Application.Models.LexiLearn;
+using MediatR;
 
 namespace Lexilearn.Application.Features.Lexilearn.Decks.Commands.CreateDeck
 {
-    public class CreateDeckCommand : IRequest<CreateDeckResponse>
+    public class CreateDeckCommand : IRequest<Result<CreateDeckResponse>>
     {
         public string Title { get; set; }
         public string TermLanguageCode { get; set; }

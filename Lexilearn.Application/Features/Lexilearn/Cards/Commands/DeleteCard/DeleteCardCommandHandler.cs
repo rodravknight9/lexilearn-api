@@ -1,10 +1,11 @@
 using Lexilearn.Application.Contracts.Persistence;
+using Lexilearn.Application.Models.LexiLearn;
 using Lexilearn.Domain;
 using MediatR;
 
 namespace Lexilearn.Application.Features.Lexilearn.Cards.Commands.DeleteCard;
 
-public class DeleteCardCommandHandler : IRequestHandler<DeleteCardCommand>
+public class DeleteCardCommandHandler : IRequestHandler<DeleteCardCommand, SoftResult>
 {
     private readonly IUnitOfWork _unitOfWork;
     
@@ -13,9 +14,10 @@ public class DeleteCardCommandHandler : IRequestHandler<DeleteCardCommand>
         _unitOfWork = unitOfWork;
     }
     
-    public async Task Handle(DeleteCardCommand request, CancellationToken cancellationToken)
+    public async Task<SoftResult> Handle(DeleteCardCommand request, CancellationToken cancellationToken)
     {
-        var card = await _unitOfWork.Repository<Card>().GetByIdAsync(request.Id);
+        var card = await _unitOfWork.Repository<Card>()
+            .GetOne(card => card.Id == request.Id && card.CreatedBy == request.UserId);
         if (card.IsActive)
         {
             // soft delete
@@ -26,5 +28,7 @@ public class DeleteCardCommandHandler : IRequestHandler<DeleteCardCommand>
         {
             await _unitOfWork.Repository<Card>().DeleteAsync(card);
         }
+
+        return SoftResult.Success();
     }
 }

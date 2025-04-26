@@ -32,7 +32,12 @@ namespace Lexilearn.WebApi.Controllers
         { 
             var command = _mapper.Map<CreateDeckCommand>(request);
             command.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            return Ok(await _mediator.Send(command));
+            var result = await _mediator.Send(command);
+            
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+            
+            return Ok(result.Value);
         }
 
         [HttpPatch]
@@ -40,7 +45,11 @@ namespace Lexilearn.WebApi.Controllers
         {
             var command = _mapper.Map<EditDeckCommand>(request);
             command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); 
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+            
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+            
             return NoContent();
         }
 
@@ -49,7 +58,12 @@ namespace Lexilearn.WebApi.Controllers
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var query = new GetDeckQuery(id, userId);
-            return Ok(await _mediator.Send(query));
+            var result = await _mediator.Send(query);
+            
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+            
+            return Ok(result.Value);
         }
 
         [HttpGet]
@@ -57,14 +71,24 @@ namespace Lexilearn.WebApi.Controllers
         {
             var query = _mapper.Map<GetDecksQuery>(paginationSettings);
             query.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            return Ok(await _mediator.Send(query));
+            var result = await _mediator.Send(query);
+            
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+            
+            return Ok(result.Value);
         }
         
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var command = new DeleteDeckCommand(id);
-            await _mediator.Send(command);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var command = new DeleteDeckCommand(id, userId);
+            var result = await _mediator.Send(command);
+            
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+            
             return NoContent();
         }
     }

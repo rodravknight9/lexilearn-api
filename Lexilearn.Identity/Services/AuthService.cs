@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Lexilearn.Application.Contracts.Identity;
 using Lexilearn.Application.Models.Identity;
+using Lexilearn.Application.Models.LexiLearn;
 using Lexilearn.Identity.Models;
 using Lexilearn.Identity.Persistence;
 using MapsterMapper;
@@ -24,25 +25,21 @@ public class AuthService : IAuthService
         _mapper = mapper;
         _jwtSettings = jwtSettings.Value;
     }
-    public async Task<AuthResponse> Login(LoginRequest request)
+    public async Task<Result<AuthResponse>> Login(LoginRequest request)
     {
         var user = await _context.Users
             .Where(u => u.UserName == request.UserName)
             .FirstOrDefaultAsync();
 
         if (user == null)
-        {
-            throw new Exception("User not found");
-        }
-        
+            return Result<AuthResponse>.Failure(Error.UserNotFound);
+
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
-        {
-            throw new Exception("Invalid password");
-        }
-        
+            return Result<AuthResponse>.Failure(Error.InvalidPassword);
+
         var response = _mapper.Map<AuthResponse>(user);
         response.Jwt = GenerateJwtToken(user);
-        return response;
+        return Result<AuthResponse>.Success(response);
     }
 
     private string GenerateJwtToken(User user)
@@ -69,17 +66,15 @@ public class AuthService : IAuthService
         return tokenHandler.WriteToken(token);
     }
 
-    public async Task<AuthResponse> Register(RegistrationRequest request)
+    public async Task<Result<AuthResponse>> Register(RegistrationRequest request)
     {
         var user = await _context.Users
             .Where(u => u.UserName == request.UserName)
             .FirstOrDefaultAsync();
 
         if (user != null)
-        {
-            throw new Exception("User already exists");
-        }
-        
+            return Result<AuthResponse>.Failure(Error.UserAlreadyExists);
+
         var newUser = _mapper.Map<User>(request);
         newUser.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
         
@@ -87,6 +82,6 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
         
         var response = _mapper.Map<AuthResponse>(newUser);
-        return response;
+        return Result<AuthResponse>.Success(response);
     }
 }

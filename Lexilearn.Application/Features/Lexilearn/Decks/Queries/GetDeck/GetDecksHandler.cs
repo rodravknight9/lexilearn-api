@@ -1,11 +1,12 @@
 ﻿using Lexilearn.Application.Contracts.Persistence;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
+using Lexilearn.Application.Models.LexiLearn;
 using MapsterMapper;
 using MediatR;
 
 namespace Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck
 {
-    public class GetDecksHandler : IRequestHandler<GetDeckQuery, GetDeckResponse>
+    public class GetDecksHandler : IRequestHandler<GetDeckQuery, Result<GetDeckResponse>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -14,10 +15,11 @@ namespace Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<GetDeckResponse> Handle(GetDeckQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetDeckResponse>> Handle(GetDeckQuery request, CancellationToken cancellationToken)
         {
             var deck = await _unitOfWork.DeckRepository.GetByIdAsync(request.Id);
-            return _mapper.Map<GetDeckResponse>(deck);
+            var result = _mapper.Map<GetDeckResponse>(deck);
+            return Result<GetDeckResponse>.Success(result);
         }
     }
 }

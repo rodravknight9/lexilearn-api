@@ -17,15 +17,23 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
     
-    [HttpPost("login")]
+    [HttpPost("Login")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest loginRequest)
     {
-        return Ok(await _authService.Login(loginRequest));
+        var response = await _authService.Login(loginRequest);
+        if (response.HasErrors)
+            return BadRequest(response.Error);
+        
+        return Ok(response.Value);
     }
     
-    [HttpPost("register")]
+    [HttpPost("Register")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegistrationRequest registerRequest)
     {
-        return Ok(await _authService.Register(registerRequest));
+        var response = await _authService.Register(registerRequest);
+        if (response.HasErrors)
+            return BadRequest(response.Error);
+        
+        return Ok(response.Value);
     }
 }

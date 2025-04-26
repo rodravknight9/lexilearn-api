@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Lexilearn.Application.Features.Lexilearn.Cards.Commands.CreateCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Commands.DeleteCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Commands.EditCard;
@@ -5,14 +6,17 @@ using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCardsByDeck;
 using Lexilearn.Shared;
+using Lexilearn.WebApi.DataTransfer.Cards;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lexilearn.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CardsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -25,23 +29,42 @@ public class CardsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CreateCardResponse>> Create([FromBody] CreateCardCommand command)
+    public async Task<ActionResult<CreateCardResponse>> Create([FromBody] CreateCardRequest request)
     {
-        return Ok(await _mediator.Send(command));
+        var command = _mapper.Map<CreateCardCommand>(request);
+        command.CreatedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); 
+        var result = await _mediator.Send(command);
+            
+        if(result.HasErrors)
+            return BadRequest(result.Error);
+            
+        return Ok(result.Value);
     }
 
     [HttpPatch]
-    public async Task<ActionResult> Update([FromBody] EditCardCommand command)
+    public async Task<ActionResult> Update([FromBody] EditCardRequest request)
     {
-        await _mediator.Send(command);
-        return Ok();
+        var command = _mapper.Map<EditCardCommand>(request);
+        command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); 
+        var result = await _mediator.Send(command);
+            
+        if(result.HasErrors)
+            return BadRequest(result.Error);
+            
+        return NoContent();
     }
     
     [HttpGet("{id}")]
     public async Task<ActionResult<GetCardResponse>> Get(int id)
     {
-        var query = new GetCardQuery(id);
-        return Ok(await _mediator.Send(query));
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetCardQuery(id, userId);
+        var result = await _mediator.Send(query);
+            
+        if(result.HasErrors)
+            return BadRequest(result.Error);
+            
+        return Ok(result.Value);
     }
 
     [HttpGet("Deck/{deckId}/")]
@@ -50,14 +73,25 @@ public class CardsController : ControllerBase
     {
         var request = _mapper.Map<GetCardsByDeckQuery>(pagination);
         request.DeckId = deckId;
-        return Ok(await _mediator.Send(request));
+
+        var result = await _mediator.Send(request); 
+        
+        if(result.HasErrors)
+            return BadRequest(result.Error);
+        
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var command = new DeleteCardCommand(id);
-        await _mediator.Send(command);
-        return Ok();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var command = new DeleteCardCommand(id, userId);
+        var result = await _mediator.Send(command);
+            
+        if(result.HasErrors)
+            return BadRequest(result.Error);
+            
+        return NoContent();
     }
 }
