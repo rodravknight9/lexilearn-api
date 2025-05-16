@@ -4,6 +4,7 @@ using Lexilearn.MySql.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lexilearn.MySql.Migrations
 {
     [DbContext(typeof(LexilearnDbContext))]
-    partial class LexilearnDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250512015515_03_UpdateSessionTable")]
+    partial class _03_UpdateSessionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

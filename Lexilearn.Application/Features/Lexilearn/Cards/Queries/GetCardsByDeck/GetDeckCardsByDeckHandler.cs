@@ -22,7 +22,18 @@ public class GetDeckCardsByDeckHandler : IRequestHandler<GetCardsByDeckQuery, Re
     {
         var pagination = _mapper.Map<PaginationSettings>(request);
         var cards = await _unitOfWork.CardRepository.GetByDeckId(pagination, request.DeckId);
+        
+        var cardIds = cards.Select(c => c.Id).ToList();
+        var sessions =
+            await _unitOfWork.PracticeSessionCardsRepository.GetMany((s) => cardIds.Contains(s.CardId));
+        
         var result = _mapper.Map<IReadOnlyList<GetCardResponse>>(cards);
+        foreach (var getCardResponse in result)
+        {
+            getCardResponse.LastStatus = sessions
+                .First(s => s.CardId.Equals(getCardResponse.Id)).Status;
+        }
+        
         return Result<IReadOnlyList<GetCardResponse>>.Success(result);
     }
 }

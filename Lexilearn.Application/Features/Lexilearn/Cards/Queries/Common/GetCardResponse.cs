@@ -7,4 +7,5 @@ public class GetCardResponse
     public string Back {  get; set; }
     public bool IsFavorite { get; set; }
     public int DeckId { get; set; }
+    public int LastStatus { get; set; }
 }

@@ -25,6 +25,7 @@ namespace Lexilearn.MySql
 
             services.AddScoped<IDeckRepository, DeckRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<IPracticeSessionRepository, PracticeSessionRepository>();
 
             return services;
         }

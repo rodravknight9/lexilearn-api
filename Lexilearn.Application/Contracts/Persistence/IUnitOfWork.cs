@@ -7,6 +7,9 @@ namespace Lexilearn.Application.Contracts.Persistence
     {
         IDeckRepository DeckRepository { get; }
         ICardRepository CardRepository { get; }
+        IPracticeSessionRepository PracticeSessionRepository { get; }
+        IPracticeSessionCardsRepository PracticeSessionCardsRepository { get; }
+        
         IAsyncRepository<TEntity> Repository<TEntity>() where TEntity : BaseDomainModel;
         Task<int> Complete();
     }
