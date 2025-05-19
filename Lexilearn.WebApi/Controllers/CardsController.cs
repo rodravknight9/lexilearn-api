@@ -6,7 +6,7 @@ using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCardsByDeck;
 using Lexilearn.Shared;
-using Lexilearn.WebApi.DataTransfer.Cards;
+using Lexilearn.DataTransfer.Cards;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

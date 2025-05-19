@@ -1,5 +1,5 @@
 using Lexilearn.Application.Features.Lexilearn.PracticeSession.Commands.SavePracticeSession;
-using Lexilearn.WebApi.DataTransfer.PracticeSessions;
+using Lexilearn.DataTransfer.PracticeSessions;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

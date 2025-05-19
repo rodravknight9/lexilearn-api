@@ -1,5 +1,6 @@
 ﻿using Lexilearn.Application.Features.Translation.Commands.TranslateText;
 using Lexilearn.Application.Models.LibreTranslate;
+using Lexilearn.DataTransfer.Translation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,12 @@ namespace Lexilearn.WebApi.Controllers
         [HttpPost()]
         public async Task<ActionResult<TranslationResponse>> Translate([FromBody] TranslateTextCommand command)
         { 
-            return Ok(await _mediator.Send(command));
+            var response = await _mediator.Send(command);
+            var result = new TranslationOutput()
+            { 
+                TranslatedText = response.translatedText
+            };
+            return Ok(result);
         }
     }
 }

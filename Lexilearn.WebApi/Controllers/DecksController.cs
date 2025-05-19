@@ -6,7 +6,7 @@ using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
 using Lexilearn.Shared;
-using Lexilearn.WebApi.DataTransfer.Decks;
+using Lexilearn.DataTransfer.Decks;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
