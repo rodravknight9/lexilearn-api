@@ -39,9 +39,12 @@ public class PracticeSessionController : ControllerBase
     [HttpGet("StartDate/{startDate}/EndDate/{endDate}")]
     public async Task<ActionResult<GetSessionHistoryResponse>> Get(DateTime startDate, DateTime endDate)
     {
-        GetSessionHistoryQuery query = new(){
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        GetSessionHistoryQuery query = new()
+        {
             StartDate = startDate,
-            EndDate = endDate
+            EndDate = endDate,
+            UserId = userId
         };
         
         var result = await _mediator.Send(query);

@@ -3,7 +3,6 @@ using Lexilearn.Domain.Common;
 using Lexilearn.MySql.Persistence;
 using Lexilearn.Shared;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq.Expressions;
 
 namespace Lexilearn.MySql.Repository.Base
@@ -12,22 +11,23 @@ namespace Lexilearn.MySql.Repository.Base
     {
         private readonly LexilearnDbContext _dbContext;
         private readonly DbSet<TEntity> _dbSet;
+
         public RepositoryBase(LexilearnDbContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<TEntity>();
         }
-        public async Task<TEntity> AddAsync(TEntity entity)
+
+        public Task<TEntity> AddAsync(TEntity entity)
         {
             _dbSet.Add(entity);
-            await _dbContext.SaveChangesAsync();
-            return entity;
+            return Task.FromResult(entity);
         }
 
-        public async Task DeleteAsync(TEntity entity)
+        public Task DeleteAsync(TEntity entity)
         {
             _dbSet.Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         public async Task<IReadOnlyList<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate)
@@ -41,7 +41,7 @@ namespace Lexilearn.MySql.Repository.Base
         {
             int pageNumber = pagination.PageNumber ?? 0;
             int pageSize = pagination.PageSize ?? 10;
-            
+
             return await _dbSet
                 .Where(predicate)
                 .Skip(pageNumber * pageSize)
@@ -56,7 +56,7 @@ namespace Lexilearn.MySql.Repository.Base
                 .FirstAsync();
         }
 
-        public async Task<TEntity> GetByIdAsync(int id)
+        public async Task<TEntity?> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -66,16 +66,16 @@ namespace Lexilearn.MySql.Repository.Base
             int pageNumber = pagination.PageNumber ?? 0;
             int pageSize = pagination.PageSize ?? 10;
             return await _dbSet
-                    .Skip(pageNumber * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync();
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public Task UpdateAsync(TEntity entity)
         {
             _dbSet.Update(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
     }
 }

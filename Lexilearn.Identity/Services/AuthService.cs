@@ -46,6 +46,9 @@ public class AuthService : IAuthService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
+        var expires = _jwtSettings.DurationInMinutes > 0
+            ? DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes)
+            : DateTime.UtcNow.AddHours(24);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -54,9 +57,9 @@ public class AuthService : IAuthService
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             }),
-            //Expires = DateTime.UtcNow.AddHours(1),
+            Expires = expires,
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key), 
+                new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature),
             Issuer = _jwtSettings.Issuer,
             Audience = _jwtSettings.Audience,

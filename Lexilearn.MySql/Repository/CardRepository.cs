@@ -14,7 +14,7 @@ namespace Lexilearn.MySql.Repository
 
         public async Task<IReadOnlyList<Card>> GetByDeckId(PaginationSettings pagination, int deckId)
         {
-            return await GetAsync(pagination, c => c.DeckId == deckId);
+            return await GetAsync(pagination, c => c.DeckId == deckId && c.IsActive);
         }
     }
 }

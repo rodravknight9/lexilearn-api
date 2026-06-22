@@ -2,12 +2,14 @@
 using Lexilearn.Application.Models.LibreTranslate;
 using Lexilearn.DataTransfer.Translation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lexilearn.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TranslationController : ControllerBase
     {
         private readonly IMediator _mediator;

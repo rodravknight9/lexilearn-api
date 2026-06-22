@@ -12,4 +12,5 @@ public class EditDeckCommand : IRequest<SoftResult>
     public string? Description { get; set; }
     public string? Color { get; set; }
     public int? LastModifiedBy { get; set; }
+    public int UserId { get; set; }
 }

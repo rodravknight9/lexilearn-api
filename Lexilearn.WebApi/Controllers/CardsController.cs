@@ -45,7 +45,8 @@ public class CardsController : ControllerBase
     public async Task<ActionResult> Update([FromBody] EditCardRequest request)
     {
         var command = _mapper.Map<EditCardCommand>(request);
-        command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); 
+        command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        command.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var result = await _mediator.Send(command);
             
         if(result.HasErrors)
@@ -71,8 +72,10 @@ public class CardsController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<GetCardResponse>>> GetByDeck([FromRoute] int deckId, 
         [FromQuery] PaginationSettings pagination)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var request = _mapper.Map<GetCardsByDeckQuery>(pagination);
         request.DeckId = deckId;
+        request.UserId = userId;
 
         var result = await _mediator.Send(request); 
         

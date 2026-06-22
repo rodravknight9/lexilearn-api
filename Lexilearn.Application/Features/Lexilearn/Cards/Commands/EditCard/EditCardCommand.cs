@@ -11,5 +11,6 @@ public class EditCardCommand : IRequest<SoftResult>
     public bool? IsFavorite { get; set; }
     public int LastModifiedBy { get; set; }
 
-    public int? DeckId { get; set; }    
+    public int? DeckId { get; set; }
+    public int UserId { get; set; }
 }

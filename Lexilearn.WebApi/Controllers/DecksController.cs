@@ -31,7 +31,7 @@ namespace Lexilearn.WebApi.Controllers
         public async Task<ActionResult<CreateDeckResponse>> Create([FromBody] CreateDeckRequest request)
         { 
             var command = _mapper.Map<CreateDeckCommand>(request);
-            command.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            command.CreatedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var result = await _mediator.Send(command);
             
             if(result.HasErrors)
@@ -44,7 +44,8 @@ namespace Lexilearn.WebApi.Controllers
         public async Task<ActionResult> Update([FromBody] EditDeckRequest request)
         {
             var command = _mapper.Map<EditDeckCommand>(request);
-            command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); 
+            command.LastModifiedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            command.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var result = await _mediator.Send(command);
             
             if(result.HasErrors)

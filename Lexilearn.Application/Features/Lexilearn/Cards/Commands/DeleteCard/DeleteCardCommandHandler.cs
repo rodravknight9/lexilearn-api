@@ -1,4 +1,5 @@
 using Lexilearn.Application.Contracts.Persistence;
+using Lexilearn.Application.Contracts.Services;
 using Lexilearn.Application.Models.LexiLearn;
 using Lexilearn.Domain;
 using MediatR;
@@ -8,19 +9,22 @@ namespace Lexilearn.Application.Features.Lexilearn.Cards.Commands.DeleteCard;
 public class DeleteCardCommandHandler : IRequestHandler<DeleteCardCommand, SoftResult>
 {
     private readonly IUnitOfWork _unitOfWork;
-    
-    public DeleteCardCommandHandler(IUnitOfWork unitOfWork)
+    private readonly IDeckOwnershipService _ownership;
+
+    public DeleteCardCommandHandler(IUnitOfWork unitOfWork, IDeckOwnershipService ownership)
     {
         _unitOfWork = unitOfWork;
+        _ownership = ownership;
     }
-    
+
     public async Task<SoftResult> Handle(DeleteCardCommand request, CancellationToken cancellationToken)
     {
-        var card = await _unitOfWork.Repository<Card>()
-            .GetOne(card => card.Id == request.Id && card.CreatedBy == request.UserId);
+        var card = await _ownership.GetOwnedCardAsync(request.Id, request.UserId, cancellationToken);
+        if (card is null)
+            return SoftResult.Failure($"{Error.NotFound.Code}: {Error.NotFound.Message}");
+
         if (card.IsActive)
         {
-            // soft delete
             card.IsActive = false;
             await _unitOfWork.Repository<Card>().UpdateAsync(card);
         }
@@ -29,6 +33,7 @@ public class DeleteCardCommandHandler : IRequestHandler<DeleteCardCommand, SoftR
             await _unitOfWork.Repository<Card>().DeleteAsync(card);
         }
 
+        await _unitOfWork.Complete();
         return SoftResult.Success();
     }
 }

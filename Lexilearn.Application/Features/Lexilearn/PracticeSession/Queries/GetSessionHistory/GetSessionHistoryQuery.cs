@@ -7,4 +7,5 @@ public class GetSessionHistoryQuery : IRequest<Result<List<GetSessionHistoryResp
 {
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+    public int UserId { get; set; }
 }

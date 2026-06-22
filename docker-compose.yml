@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  libretranslate:
+    image: libretranslate/libretranslate
+    ports:
+      - "5000:5000"
+    environment:
+      LT_LOAD_ONLY: en,pt,es,fr,de
+
+  webapi:
+    build:
+      context: .
+      dockerfile: Lexilearn.WebApi/Dockerfile
+    ports:
+      - "5288:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__LexilearnDb: server=mysql;Database=LexilearnDb;Uid=root;Pwd=root;
+      ConnectionStrings__IdentityDb: server=mysql;Database=IdentityDb;Uid=root;Pwd=root;
+      JwtSettings__Key: ${JWT_KEY:-change-me-in-production-use-at-least-32-chars}
+      JwtSettings__Issuer: LexilearnAvlaar
+      JwtSettings__Audience: LexilearnAvlaar
+      LibreTranslateSettings__Host: http://libretranslate
+      LibreTranslateSettings__Port: "5000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      libretranslate:
+        condition: service_started
+
+volumes:
+  mysql_data:

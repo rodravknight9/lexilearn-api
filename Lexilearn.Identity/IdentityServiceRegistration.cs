@@ -1,28 +1,44 @@
-﻿using System.Text;
-using Lexilearn.Application.Contracts.Identity;
+﻿using Lexilearn.Application.Contracts.Identity;
 using Lexilearn.Application.Models.Identity;
 using Lexilearn.Identity.Persistence;
 using Lexilearn.Identity.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Lexilearn.Identity
 {
     public static class IdentityServiceRegistration
     {
-        public static IServiceCollection ConfigureIdentityService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureIdentityService(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-            var connectionString = configuration.GetConnectionString("IdentityDb");
-            var serverVersion = ServerVersion.AutoDetect(connectionString);
-            
-            services.AddDbContext<LexilearnIdentityDbContext>(options =>
-                options.UseMySql(connectionString, serverVersion)
-            );
+
+            if (environment.IsEnvironment("Testing"))
+            {
+                services.AddDbContext<LexilearnIdentityDbContext>(options =>
+                    options.UseInMemoryDatabase("IdentityTestDb"));
+            }
+            else
+            {
+                var connectionString = configuration.GetConnectionString("IdentityDb");
+                var serverVersion = ServerVersion.AutoDetect(connectionString);
+                services.AddDbContext<LexilearnIdentityDbContext>(options =>
+                    options.UseMySql(connectionString, serverVersion));
+            }
             services.AddTransient<IAuthService, AuthService>();
+
+            var jwtKey = configuration["JwtSettings:Key"];
+            if (string.IsNullOrWhiteSpace(jwtKey))
+                jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+            if (string.IsNullOrWhiteSpace(jwtKey) && environment.IsEnvironment("Testing"))
+                jwtKey = "integration-test-signing-key-32chars!";
+            if (string.IsNullOrWhiteSpace(jwtKey))
+                throw new InvalidOperationException("JWT signing key is not configured.");
 
             services.AddAuthentication(opt =>
                 {
@@ -41,10 +57,10 @@ namespace Lexilearn.Identity
                         ValidIssuer = configuration["JwtSettings:Issuer"],
                         ValidAudience = configuration["JwtSettings:Audience"],
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!))
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                     };
                 });
-            
+
             return services;
         }
     }

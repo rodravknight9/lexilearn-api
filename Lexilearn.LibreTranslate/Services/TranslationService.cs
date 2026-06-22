@@ -1,41 +1,35 @@
 ﻿using Lexilearn.Application.Contracts.Infastructure;
 using Lexilearn.Application.Models.LibreTranslate;
+using Lexilearn.LibreTranslate.Models;
 using Microsoft.Extensions.Options;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Lexilearn.LibreTranslate.Models;
 
-namespace Lexilearn.LibreTranslate.Services
+namespace Lexilearn.LibreTranslate.Services;
+
+public class TranslationService : ITranslationService
 {
-    public class TranslationService : ITranslationService
+    private readonly LibreTranslateSettings _settings;
+    private readonly HttpClient _httpClient;
+
+    public TranslationService(HttpClient httpClient, IOptions<LibreTranslateSettings> settings)
     {
-        private readonly LibreTranslateSettings _settings;
-        private readonly HttpClient _httpClient;
-        public TranslationService(IOptions<LibreTranslateSettings> settings)
-        {
-            _settings = settings.Value;
-            _httpClient = new HttpClient();
-        }
+        _settings = settings.Value;
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri($"{_settings.Host.TrimEnd('/')}:{_settings.Port}");
+        _httpClient.Timeout = TimeSpan.FromSeconds(30);
+    }
 
-        public async Task<TranslationResponse> TranslateText(TranslationRequest request)
-        {
-            var json = JsonSerializer.Serialize(request);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+    public async Task<TranslationResponse> TranslateText(TranslationRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/translate", request);
+        response.EnsureSuccessStatusCode();
 
-            var url = GetLibreTranslateHost();
+        var translation = await response.Content.ReadFromJsonAsync<TranslationResponse>();
+        if (translation is null)
+            throw new InvalidOperationException("LibreTranslate returned an empty response.");
 
-            var response = await _httpClient.PostAsync(url, data);
-
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            var translation = JsonSerializer.Deserialize<TranslationResponse>(jsonResponse);
-            
-            return translation;
-        }
-
-        private string GetLibreTranslateHost() 
-        {
-            return _settings.Host + ":" + _settings.Port + "/translate";
-        }
-
+        return translation;
     }
 }
