@@ -13,6 +13,13 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Lexilearn.WebApi/Lexilearn.WebApi.csproj", "Lexilearn.WebApi/"]
+COPY ["Lexilearn.DataTransfer/Lexilearn.DataTransfer.csproj", "Lexilearn.DataTransfer/"]
+COPY ["Lexilearn.LibreTranslate/Lexilearn.LibreTranslate.csproj", "Lexilearn.LibreTranslate/"]
+COPY ["Lexilearn.Application/Lexilearn.Application.csproj", "Lexilearn.Application/"]
+COPY ["Lexilearn.Identity/Lexilearn.Identity.csproj", "Lexilearn.Identity/"]
+COPY ["Lexilearn.MySql/Lexilearn.MySql.csproj", "Lexilearn.MySql/"]
+COPY ["Lexilearn.Shared/Lexilearn.Shared.csproj", "Lexilearn.Shared/"]
+COPY ["Lexilearn.Domain/Lexilearn.Domain.csproj", "Lexilearn.Domain/"]
 RUN dotnet restore "./Lexilearn.WebApi/Lexilearn.WebApi.csproj"
 COPY . .
 WORKDIR "/src/Lexilearn.WebApi"

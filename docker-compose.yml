@@ -7,6 +7,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 5s
@@ -19,6 +20,21 @@ services:
       - "5000:5000"
     environment:
       LT_LOAD_ONLY: en,pt,es,fr,de
+
+  migrator:
+    build:
+      context: .
+      dockerfile: Lexilearn.WebApi/Dockerfile.migrator
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__LexilearnDb: server=mysql;Database=LexilearnDb;Uid=root;Pwd=root;
+      ConnectionStrings__IdentityDb: server=mysql;Database=IdentityDb;Uid=root;Pwd=root;
+      JwtSettings__Key: ${JWT_KEY:-change-me-in-production-use-at-least-32-chars}
+      JwtSettings__Issuer: LexilearnAvlaar
+      JwtSettings__Audience: LexilearnAvlaar
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   webapi:
     build:
@@ -39,6 +55,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
       libretranslate:
         condition: service_started
 
