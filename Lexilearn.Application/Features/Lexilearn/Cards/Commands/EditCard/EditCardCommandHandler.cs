@@ -44,6 +44,7 @@ public class EditCardCommandHandler : IRequestHandler<EditCardCommand, SoftResul
     {
         card.Front = cardRequest.Front ?? card.Front;
         card.Back = cardRequest.Back ?? card.Back;
+        card.Example = cardRequest.Example ?? card.Example;
         card.IsFavorite = cardRequest.IsFavorite ?? card.IsFavorite;
         card.DeckId = cardRequest.DeckId ?? card.DeckId;
         card.LastModifiedBy = cardRequest.LastModifiedBy;

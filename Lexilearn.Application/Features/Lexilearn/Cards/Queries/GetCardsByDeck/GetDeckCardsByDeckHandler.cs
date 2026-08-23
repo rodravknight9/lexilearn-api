@@ -33,8 +33,8 @@ public class GetDeckCardsByDeckHandler : IRequestHandler<GetCardsByDeckQuery, Re
 
         var cardIds = cards.Select(c => c.Id).ToList();
         var sessionCards = cardIds.Count == 0
-            ? Array.Empty<PracticeSessionCards>()
-            : await _unitOfWork.PracticeSessionCardsRepository.GetMany(s => cardIds.Contains(s.CardId));
+            ? Array.Empty<CardReview>()
+            : await _unitOfWork.CardReviewRepository.GetMany(s => cardIds.Contains(s.CardId));
 
         var sessionIds = sessionCards.Select(s => s.SessionId).Distinct().ToList();
         var sessions = sessionIds.Count == 0
@@ -46,10 +46,10 @@ public class GetDeckCardsByDeckHandler : IRequestHandler<GetCardsByDeckQuery, Re
         var result = _mapper.Map<IReadOnlyList<GetCardResponse>>(cards);
         foreach (var cardResponse in result)
         {
-            cardResponse.LastStatus = sessionCards
+            cardResponse.LastStatus = (int)sessionCards
                 .Where(s => s.CardId == cardResponse.Id)
                 .OrderByDescending(s => sessionDates.GetValueOrDefault(s.SessionId))
-                .Select(s => s.Status)
+                .Select(s => s.Rating)
                 .FirstOrDefault();
         }
 

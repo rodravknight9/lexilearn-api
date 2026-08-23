@@ -27,6 +27,7 @@ public class CreateCardCommandHandler : IRequestHandler<CreateCardCommand, Resul
             return Result<CreateCardResponse>.Failure(Error.Forbidden);
 
         var cardDomain = _mapper.Map<Card>(request);
+        cardDomain.SchedulingState = new CardSchedulingState();
 
         var newEntity = await _unitOfWork.Repository<Card>().AddAsync(cardDomain);
         await _unitOfWork.Complete();

@@ -10,7 +10,8 @@ namespace Lexilearn.MySql.Persistence
     {
         public DbSet<Card> Cards { get; set; }
         public DbSet<Deck> Decks { get; set; }
-        public DbSet<PracticeSessionCards> PracticeSessionCards { get; set; }
+        public DbSet<CardSchedulingState> CardSchedulingStates { get; set; }
+        public DbSet<CardReview> CardReviews { get; set; }
         public DbSet<PracticeSession> PracticeSessions { get; set; }
         public LexilearnDbContext(DbContextOptions<LexilearnDbContext> dbContextOptions)
             : base(dbContextOptions)

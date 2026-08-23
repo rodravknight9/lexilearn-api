@@ -10,8 +10,8 @@ public class PracticeSessionConfiguration : IEntityTypeConfiguration<PracticeSes
     {
         builder
             .HasMany(s => s.Cards)
-            .WithOne(s => s.PracticeSession)
-            .HasForeignKey(s => s.SessionId)
+            .WithOne(r => r.PracticeSession)
+            .HasForeignKey(r => r.SessionId)
             .IsRequired();
     }
 }
