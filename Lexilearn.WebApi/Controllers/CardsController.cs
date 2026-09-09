@@ -5,6 +5,7 @@ using Lexilearn.Application.Features.Lexilearn.Cards.Commands.EditCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCard;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetCardsByDeck;
+using Lexilearn.Application.Features.Lexilearn.Cards.Queries.GetDueCards;
 using Lexilearn.Shared;
 using Lexilearn.DataTransfer.Cards;
 using MapsterMapper;
@@ -82,6 +83,28 @@ public class CardsController : ControllerBase
         if(result.HasErrors)
             return BadRequest(result.Error);
         
+        return Ok(result.Value);
+    }
+
+    [HttpGet("Deck/{deckId}/Due")]
+    public async Task<ActionResult<IReadOnlyList<GetCardResponse>>> GetDue([FromRoute] int deckId,
+        [FromQuery] int limit = 20, [FromQuery] int newCardsPercentage = 20, [FromQuery] int hardCardsPercentage = 30)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetDueCardsQuery
+        {
+            DeckId = deckId,
+            UserId = userId,
+            Limit = limit,
+            NewCardsPercentage = newCardsPercentage,
+            HardCardsPercentage = hardCardsPercentage
+        };
+
+        var result = await _mediator.Send(query);
+
+        if(result.HasErrors)
+            return BadRequest(result.Error);
+
         return Ok(result.Value);
     }
 

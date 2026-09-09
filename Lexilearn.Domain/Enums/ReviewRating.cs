@@ -2,8 +2,8 @@ namespace Lexilearn.Domain.Enums;
 
 public enum ReviewRating
 {
-    Again = 1,
-    Hard = 2,
-    Good = 3,
-    Easy = 4
+    Fail = 0,
+    Hard = 1,
+    Easy = 2,
+    Learnt = 3
 }

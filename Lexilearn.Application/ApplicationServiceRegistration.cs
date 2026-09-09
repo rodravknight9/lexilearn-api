@@ -14,6 +14,7 @@ namespace Lexilearn.Application
             services.AddMapster();
             TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
             services.AddScoped<IDeckOwnershipService, DeckOwnershipService>();
+            services.AddScoped<ISpacedRepetitionScheduler, SpacedRepetitionScheduler>();
             return services;
         }
     }
