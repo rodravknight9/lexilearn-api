@@ -5,8 +5,12 @@ using Lexilearn.Application.Features.Lexilearn.Decks.Commands.EditDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
+using Lexilearn.Application.Features.Lexilearn.StudySettings.Commands.SaveStudySettings;
+using Lexilearn.Application.Features.Lexilearn.StudySettings.Common;
+using Lexilearn.Application.Features.Lexilearn.StudySettings.Queries.GetStudySettings;
 using Lexilearn.Shared;
 using Lexilearn.DataTransfer.Decks;
+using Lexilearn.DataTransfer.StudySettings;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -86,10 +90,43 @@ namespace Lexilearn.WebApi.Controllers
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var command = new DeleteDeckCommand(id, userId);
             var result = await _mediator.Send(command);
-            
+
             if(result.HasErrors)
                 return BadRequest(result.Error);
-            
+
+            return NoContent();
+        }
+
+        [HttpGet("{deckId}/StudySettings")]
+        public async Task<ActionResult<StudySettingsResponse>> GetStudySettings(int deckId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var query = new GetStudySettingsQuery { DeckId = deckId, UserId = userId };
+            var result = await _mediator.Send(query);
+
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
+        }
+
+        [HttpPut("{deckId}/StudySettings")]
+        public async Task<ActionResult> SaveStudySettings(int deckId, [FromBody] SaveStudySettingsRequest request)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var command = new SaveStudySettingsCommand
+            {
+                DeckId = deckId,
+                UserId = userId,
+                SessionSize = request.SessionSize,
+                NewCardsPercentage = request.NewCardsPercentage,
+                HardCardsPercentage = request.HardCardsPercentage
+            };
+            var result = await _mediator.Send(command);
+
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+
             return NoContent();
         }
     }

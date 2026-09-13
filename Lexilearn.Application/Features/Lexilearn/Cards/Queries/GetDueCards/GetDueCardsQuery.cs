@@ -9,7 +9,7 @@ public class GetDueCardsQuery : IRequest<Result<IReadOnlyList<GetCardResponse>>>
     public int DeckId { get; set; }
     public int UserId { get; set; }
 
-    public int Limit { get; set; } = 20;
-    public int NewCardsPercentage { get; set; } = 20;
-    public int HardCardsPercentage { get; set; } = 30;
+    public int? Limit { get; set; }
+    public int? NewCardsPercentage { get; set; }
+    public int? HardCardsPercentage { get; set; }
 }

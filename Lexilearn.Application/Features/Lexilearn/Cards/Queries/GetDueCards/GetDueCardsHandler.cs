@@ -1,6 +1,7 @@
 using Lexilearn.Application.Contracts.Persistence;
 using Lexilearn.Application.Contracts.Services;
 using Lexilearn.Application.Features.Lexilearn.Cards.Queries.Common;
+using Lexilearn.Application.Features.Lexilearn.StudySettings.Common;
 using Lexilearn.Application.Models.LexiLearn;
 using Lexilearn.Domain;
 using Lexilearn.Domain.Enums;
@@ -35,8 +36,21 @@ public class GetDueCardsHandler : IRequestHandler<GetDueCardsQuery, Result<IRead
             : await _unitOfWork.Repository<CardSchedulingState>().GetMany(s => cardIds.Contains(s.CardId));
         var statesByCardId = states.ToDictionary(s => s.CardId);
 
+        var savedSettings = (await _unitOfWork.Repository<StudySessionSettings>()
+                .GetMany(s => s.DeckId == request.DeckId))
+            .FirstOrDefault();
+
+        var limit = request.Limit
+            ?? savedSettings?.SessionSize
+            ?? StudySettingsDefaults.SessionSize;
+        var newCardsPercentage = request.NewCardsPercentage
+            ?? savedSettings?.NewCardsPercentage
+            ?? StudySettingsDefaults.NewCardsPercentage;
+        var hardCardsPercentage = request.HardCardsPercentage
+            ?? savedSettings?.HardCardsPercentage
+            ?? StudySettingsDefaults.HardCardsPercentage;
+
         var now = DateTime.UtcNow;
-        var limit = request.Limit <= 0 ? 20 : request.Limit;
 
         var newCards = cards
             .Where(c => statesByCardId[c.Id].Status == SchedulingStatus.New)
@@ -58,8 +72,8 @@ public class GetDueCardsHandler : IRequestHandler<GetDueCardsQuery, Result<IRead
             .OrderBy(c => statesByCardId[c.Id].NextReviewAt)
             .ToList();
 
-        var hardSlots = (int)Math.Round(limit * request.HardCardsPercentage / 100.0);
-        var newSlots = (int)Math.Round(limit * request.NewCardsPercentage / 100.0);
+        var hardSlots = (int)Math.Round(limit * hardCardsPercentage / 100.0);
+        var newSlots = (int)Math.Round(limit * newCardsPercentage / 100.0);
 
         var selected = new List<Card>();
         selected.AddRange(hardDueCards.Take(hardSlots));

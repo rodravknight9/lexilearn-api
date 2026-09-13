@@ -88,7 +88,7 @@ public class CardsController : ControllerBase
 
     [HttpGet("Deck/{deckId}/Due")]
     public async Task<ActionResult<IReadOnlyList<GetCardResponse>>> GetDue([FromRoute] int deckId,
-        [FromQuery] int limit = 20, [FromQuery] int newCardsPercentage = 20, [FromQuery] int hardCardsPercentage = 30)
+        [FromQuery] int? limit = null, [FromQuery] int? newCardsPercentage = null, [FromQuery] int? hardCardsPercentage = null)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var query = new GetDueCardsQuery
