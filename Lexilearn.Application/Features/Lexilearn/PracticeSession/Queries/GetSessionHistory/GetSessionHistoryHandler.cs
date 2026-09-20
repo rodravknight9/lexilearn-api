@@ -15,8 +15,13 @@ public class GetSessionHistoryHandler : IRequestHandler<GetSessionHistoryQuery, 
 
     public async Task<Result<List<GetSessionHistoryResponse>>> Handle(GetSessionHistoryQuery request, CancellationToken cancellationToken)
     {
+        // EndDate arrives as a bare date (midnight). Comparing with <= would exclude every
+        // session created later that same day, so the range must extend through the end of
+        // EndDate's calendar day instead of stopping at its start.
+        var exclusiveEndDate = request.EndDate.Date.AddDays(1);
+
         var sessions = await _unitOfWork.PracticeSessionRepository
-            .GetMany(s => s.CreatedDate <= request.EndDate
+            .GetMany(s => s.CreatedDate < exclusiveEndDate
                           && s.CreatedDate >= request.StartDate
                           && s.CreatedBy == request.UserId);
 

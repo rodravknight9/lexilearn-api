@@ -39,6 +39,7 @@ public class SavePracticeSessionCommandHandler : IRequestHandler<SavePracticeSes
         var sessionDomain = new Domain.PracticeSession
         {
             DeckId = request.DeckId,
+            CreatedBy = request.CreatedBy,
             Cards = new List<CardReview>()
         };
 
