@@ -12,4 +12,8 @@ public class Error
 
     public static Error NotFound => new() { Code = "RES-001", Message = "Resource not found" };
     public static Error Forbidden => new() { Code = "RES-002", Message = "You do not have access to this resource" };
+
+    // Anki import errors
+    public static Error InvalidAnkiPackage => new() { Code = "ANK-001", Message = "The uploaded file is not a valid Anki package" };
+    public static Error EmptyAnkiPackage => new() { Code = "ANK-002", Message = "The Anki package does not contain any cards" };
 }

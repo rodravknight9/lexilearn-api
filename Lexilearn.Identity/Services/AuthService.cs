@@ -85,6 +85,7 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
         
         var response = _mapper.Map<AuthResponse>(newUser);
+        response.Jwt = GenerateJwtToken(newUser);
         return Result<AuthResponse>.Success(response);
     }
 }

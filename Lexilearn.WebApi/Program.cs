@@ -1,9 +1,11 @@
+using Lexilearn.AnkiImport;
 using Lexilearn.LibreTranslate;
 using Lexilearn.Application;
 using Lexilearn.Identity;
 using Lexilearn.MySql;
 using Lexilearn.WebApi.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,10 +51,15 @@ builder.Services.AddOpenApi(options =>
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureLibreTranslateService(builder.Configuration);
+builder.Services.AddInfrastructureAnkiImportService();
 builder.Services.AddPersistenceServices(builder.Configuration, builder.Environment);
 builder.Services.ConfigureIdentityService(builder.Configuration, builder.Environment);
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 100_000_000;
+});
 /*builder.WebHost.ConfigureKestrel((opt =>
 {
     opt.ListenAnyIP(5000);

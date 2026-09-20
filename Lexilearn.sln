@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.Application.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.IntegrationTests", "Lexilearn.IntegrationTests\Lexilearn.IntegrationTests.csproj", "{C9482340-60BD-4181-91A9-89EFAD80F6EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexilearn.AnkiImport", "Lexilearn.AnkiImport\Lexilearn.AnkiImport.csproj", "{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,18 @@ Global
 		{C9482340-60BD-4181-91A9-89EFAD80F6EA}.Release|x64.Build.0 = Release|Any CPU
 		{C9482340-60BD-4181-91A9-89EFAD80F6EA}.Release|x86.ActiveCfg = Release|Any CPU
 		{C9482340-60BD-4181-91A9-89EFAD80F6EA}.Release|x86.Build.0 = Release|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Debug|x64.Build.0 = Debug|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Release|x64.ActiveCfg = Release|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Release|x64.Build.0 = Release|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{14A69C6F-62C4-4C62-B20A-9E1B11E658F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lexilearn.AnkiImport\Lexilearn.AnkiImport.csproj" />
     <ProjectReference Include="..\Lexilearn.DataTransfer\Lexilearn.DataTransfer.csproj" />
     <ProjectReference Include="..\Lexilearn.LibreTranslate\Lexilearn.LibreTranslate.csproj" />
     <ProjectReference Include="..\Lexilearn.Application\Lexilearn.Application.csproj" />

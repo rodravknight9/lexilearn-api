@@ -2,6 +2,7 @@
 using Lexilearn.Application.Features.Lexilearn.Decks.Commands.CreateDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Commands.DeleteDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Commands.EditDeck;
+using Lexilearn.Application.Features.Lexilearn.Decks.Commands.ImportAnkiPackage;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.Common;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDeck;
 using Lexilearn.Application.Features.Lexilearn.Decks.Queries.GetDecks;
@@ -95,6 +96,25 @@ namespace Lexilearn.WebApi.Controllers
                 return BadRequest(result.Error);
 
             return NoContent();
+        }
+
+        [HttpPost("ImportAnki")]
+        [RequestSizeLimit(100_000_000)]
+        public async Task<ActionResult<ImportAnkiPackageResponse>> ImportAnki([FromForm] ImportAnkiPackageRequest request)
+        {
+            var command = new ImportAnkiPackageCommand
+            {
+                FileStream = request.File.OpenReadStream(),
+                TermLanguageCode = request.TermLanguageCode,
+                DefinitionLanguageCode = request.DefinitionLanguageCode,
+                CreatedBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!),
+            };
+            var result = await _mediator.Send(command);
+
+            if(result.HasErrors)
+                return BadRequest(result.Error);
+
+            return Ok(result.Value);
         }
 
         [HttpGet("{deckId}/StudySettings")]
