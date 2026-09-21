@@ -79,6 +79,7 @@ public class AuthService : IAuthService
             return Result<AuthResponse>.Failure(Error.UserAlreadyExists);
 
         var newUser = _mapper.Map<User>(request);
+        newUser.LastName = string.Empty;
         newUser.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
         
         await _context.Users.AddAsync(newUser);
