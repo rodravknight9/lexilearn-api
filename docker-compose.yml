@@ -19,7 +19,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      LT_LOAD_ONLY: en,pt,es,fr,de
+      LT_LOAD_ONLY: en,pt,es,fr,de,ru
 
   migrator:
     build:

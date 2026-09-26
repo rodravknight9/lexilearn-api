@@ -16,9 +16,7 @@ public class LexilearnWebApplicationFactory : WebApplicationFactory<Program>
             {
                 ["JwtSettings:Key"] = "integration-test-signing-key-32chars!",
                 ["JwtSettings:Issuer"] = "LexilearnTest",
-                ["JwtSettings:Audience"] = "LexilearnTest",
-                ["LibreTranslateSettings:Host"] = "http://localhost",
-                ["LibreTranslateSettings:Port"] = "5000"
+                ["JwtSettings:Audience"] = "LexilearnTest"
             });
         });
     }

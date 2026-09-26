@@ -1,5 +1,6 @@
-﻿using Lexilearn.Application.Features.Translation.Commands.TranslateText;
-using Lexilearn.Application.Models.LibreTranslate;
+﻿using System.Security.Claims;
+using Lexilearn.Application.Features.Translation.Commands.TranslateText;
+using Lexilearn.Application.Models.LexiLearn;
 using Lexilearn.DataTransfer.Translation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,14 +21,23 @@ namespace Lexilearn.WebApi.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult<TranslationResponse>> Translate([FromBody] TranslateTextCommand command)
-        { 
+        public async Task<ActionResult<TranslationOutput>> Translate([FromBody] TranslateTextCommand command)
+        {
+            command.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var response = await _mediator.Send(command);
+            if (response.HasErrors)
+                return TranslateError(response.Error!);
+
             var result = new TranslationOutput()
-            { 
-                TranslatedText = response.translatedText
+            {
+                TranslatedText = response.Value!.translatedText
             };
             return Ok(result);
         }
+
+        private ActionResult TranslateError(string error) =>
+            error.StartsWith(Error.NotFound.Code, StringComparison.Ordinal)
+                ? NotFound(error)
+                : BadRequest(error);
     }
 }

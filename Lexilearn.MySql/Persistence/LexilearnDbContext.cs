@@ -14,6 +14,7 @@ namespace Lexilearn.MySql.Persistence
         public DbSet<CardReview> CardReviews { get; set; }
         public DbSet<PracticeSession> PracticeSessions { get; set; }
         public DbSet<StudySessionSettings> StudySessionSettings { get; set; }
+        public DbSet<TranslationProfile> TranslationProfiles { get; set; }
         public LexilearnDbContext(DbContextOptions<LexilearnDbContext> dbContextOptions)
             : base(dbContextOptions)
         {

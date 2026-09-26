@@ -1,4 +1,5 @@
 using Lexilearn.AnkiImport;
+using Lexilearn.CustomTranslate;
 using Lexilearn.LibreTranslate;
 using Lexilearn.Application;
 using Lexilearn.Identity;
@@ -48,9 +49,16 @@ builder.Services.AddOpenApi(options =>
         }
         return Task.CompletedTask;
     });
+
+    options.AddSchemaTransformer((schema, context, cancellationToken) =>
+    {
+        RepairDuplicateSchemaReferences(schema);
+        return Task.CompletedTask;
+    });
 });
 builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureLibreTranslateService(builder.Configuration);
+builder.Services.AddInfrastructureLibreTranslateService();
+builder.Services.AddInfrastructureCustomTranslateService();
 builder.Services.AddInfrastructureAnkiImportService();
 builder.Services.AddPersistenceServices(builder.Configuration, builder.Environment);
 builder.Services.ConfigureIdentityService(builder.Configuration, builder.Environment);
@@ -74,13 +82,15 @@ app.UseCors(policy =>
     {
         policy.WithOrigins(corsSettings.AllowedOrigins)
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     }
     else if (app.Environment.IsDevelopment())
     {
-        policy.AllowAnyOrigin()
+        policy.SetIsOriginAllowed(_ => true)
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     }
 });
 
@@ -103,5 +113,34 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// System.Text.Json emits a relative $ref when the same type is used twice (headers and body).
+// OpenAPI turns that into "#/components/schemas/#/...", which Swagger cannot resolve.
+static void RepairDuplicateSchemaReferences(OpenApiSchema schema)
+{
+    if (schema.Reference?.Id is { } id && id.Contains('#'))
+        schema.Reference.Id = "RequestEntry";
+
+    if (schema.Items is not null)
+        RepairDuplicateSchemaReferences(schema.Items);
+
+    if (schema.Properties is not null)
+    {
+        foreach (var property in schema.Properties.Values)
+            RepairDuplicateSchemaReferences(property);
+    }
+
+    foreach (var composed in new[] { schema.AllOf, schema.AnyOf, schema.OneOf })
+    {
+        if (composed is null)
+            continue;
+
+        foreach (var child in composed)
+            RepairDuplicateSchemaReferences(child);
+    }
+
+    if (schema.AdditionalProperties is not null)
+        RepairDuplicateSchemaReferences(schema.AdditionalProperties);
+}
 
 public partial class Program;

@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lexilearn.Application\Lexilearn.Application.csproj" />
+    <ProjectReference Include="..\Lexilearn.CustomTranslate\Lexilearn.CustomTranslate.csproj" />
+    <ProjectReference Include="..\Lexilearn.LibreTranslate\Lexilearn.LibreTranslate.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@ using Lexilearn.MySql.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lexilearn.MySql.Migrations
 {
     [DbContext(typeof(LexilearnDbContext))]
-    partial class LexilearnDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260926180814_06_TranslationProfiles")]
+    partial class _06_TranslationProfiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,11 +342,6 @@ namespace Lexilearn.MySql.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Kind")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
                     b.Property<int?>("LastModifiedBy")
                         .HasColumnType("int");
 
@@ -373,6 +371,50 @@ namespace Lexilearn.MySql.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TranslationProfiles");
+                });
+
+            modelBuilder.Entity("Lexilearn.Domain.UserLibreTranslateSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Port")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserLibreTranslateSettings");
                 });
 
             modelBuilder.Entity("Lexilearn.Domain.Card", b =>

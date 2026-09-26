@@ -1,30 +1,27 @@
-﻿using Lexilearn.Application.Contracts.Infastructure;
+﻿using System.Net.Http.Json;
+using Lexilearn.Application.Contracts.Infastructure;
 using Lexilearn.Application.Models.LibreTranslate;
-using Lexilearn.LibreTranslate.Models;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
+using Lexilearn.Application.Translation;
 
 namespace Lexilearn.LibreTranslate.Services;
 
 public class TranslationService : ITranslationService
 {
-    private readonly LibreTranslateSettings _settings;
     private readonly HttpClient _httpClient;
 
-    public TranslationService(HttpClient httpClient, IOptions<LibreTranslateSettings> settings)
+    public TranslationService(HttpClient httpClient)
     {
-        _settings = settings.Value;
         _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri($"{_settings.Host.TrimEnd('/')}:{_settings.Port}");
         _httpClient.Timeout = TimeSpan.FromSeconds(30);
     }
 
-    public async Task<TranslationResponse> TranslateText(TranslationRequest request)
+    public async Task<TranslationResponse> TranslateText(TranslationRequest request, string baseUrl)
     {
-        var response = await _httpClient.PostAsJsonAsync("/translate", request);
-        response.EnsureSuccessStatusCode();
+        var endpoint = new Uri(new Uri($"{baseUrl.TrimEnd('/')}/"), "translate");
+
+        var response = await _httpClient.PostAsJsonAsync(endpoint, request);
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException(await TranslationHttpError.ReadAsync(response));
 
         var translation = await response.Content.ReadFromJsonAsync<TranslationResponse>();
         if (translation is null)
